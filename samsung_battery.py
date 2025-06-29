@@ -55,6 +55,14 @@ class Samsung_Battery(device.ModbusDevice):
             Reg_u16( 0x001e, '/System/MinCellTemperature',access='input'),
             Reg_u16( 0x001f, '/System/MinCellTemperatureCellId',access='input'),
 
+            # Additional battery information registers from the ELPM482-00005 manual
+            Reg_u16( 0x0008, '/System/NumberOfTotalTrays', access='input'),
+            Reg_u16( 0x0009, '/System/NumberOfNormalTrays', access='input'),
+            Reg_u16( 0x0011, '/System/MaxTrayVoltagePosition', access='input'),
+            Reg_u16( 0x0012, '/System/MinTrayVoltage', 100, '%.2f V', access='input'),
+            Reg_u16( 0x0013, '/System/MinTrayVoltagePosition', access='input'),
+            Reg_u16( 0x0014, '/System/AverageCellVoltage', 1000, '%.3f V', access='input'),
+
             #Battery Error Registers
             Reg_bit(0x0006, '/Alarms/HighVoltage', text=Alarm_Translate, access='input', bit=0),
             Reg_bit(0x0006, '/Alarms/LowVoltage', text=Alarm_Translate, access='input', bit=1),
@@ -62,6 +70,8 @@ class Samsung_Battery(device.ModbusDevice):
             Reg_bit(0x0006, '/Alarms/LowTemperature', text=Alarm_Translate, access='input', bit=3),
             Reg_bit(0x0006, '/Alarms/HighChargeCurrent', text=Alarm_Translate, access='input', bit=4),
             Reg_bit(0x0006, '/Alarms/HighDischargeCurrent', text=Alarm_Translate, access='input', bit=5),
+            # Manual page indicates bit 6 signals FET over temperature
+            Reg_bit(0x0006, '/Alarms/HighInternalTemperature', text=Alarm_Translate, access='input', bit=6),
             Reg_bit(0x0006, '/Alarms/CellImbalance', text=Alarm_Translate, access='input', bit=7),
 
 
