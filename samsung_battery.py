@@ -77,6 +77,17 @@ class Samsung_Battery(device.ModbusDevice):
 
         ]
 
+    def device_init_late(self):
+        super().device_init_late()
+        self.dbus.add_path('/Dc/0/Power', None)
+
+    def device_update(self):
+        super().device_update()
+        v_reg = self.dbus.get('/Dc/0/Voltage')
+        c_reg = self.dbus.get('/Dc/0/Current')
+        if v_reg is not None and c_reg is not None and v_reg.isvalid() and c_reg.isvalid():
+            self.dbus['/Dc/0/Power'] = float(v_reg) * float(c_reg)
+
 models = {
 # We dont have a unique model number for the Samsung Battery, so we will use the firmware version to identify the model
     259:   {
